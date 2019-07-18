@@ -27,7 +27,6 @@ The tenets for the AVM are:
 ## Solution Architecture
 
 The account builder is an AWS Service Catalog product that uses AWS Lambda and AWS Organizations APIs to create AWS accounts. On each invocation, the AWS Lambda function used in this sample solution does the following:
-
 1)Check if organization unit already exist, else create an organization unit under the root account in AWS Organizations
 2)Creates a new AWS account.
 3)Moves the newly created account from the organization root to the newly created organizational unit.
@@ -56,6 +55,7 @@ Launch the product via AWS Service Catalog and log into the newly created AWS ac
 
 ## CDK
 
-The baseline.json and createaccount.json are 
+The baseline.json and createaccount.json are created using AWS CDK. https://aws.amazon.com/cdk/
+
 
 
