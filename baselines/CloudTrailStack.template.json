@@ -2,9 +2,10 @@
   "Resources": {
     "CloudTrailS310CD22F2": {
       "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
       "DeletionPolicy": "Retain",
       "Metadata": {
-        "aws:cdk:path": "CdkAccountfactoryStack/CloudTrail/S3/Resource"
+        "aws:cdk:path": "CloudTrailStack/CloudTrail/S3/Resource"
       }
     },
     "CloudTrailS3PolicyEA49A03E": {
@@ -83,7 +84,7 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "CdkAccountfactoryStack/CloudTrail/S3/Policy/Resource"
+        "aws:cdk:path": "CloudTrailStack/CloudTrail/S3/Policy/Resource"
       }
     },
     "CloudTrailA62D711D": {
@@ -102,7 +103,7 @@
         "CloudTrailS3PolicyEA49A03E"
       ],
       "Metadata": {
-        "aws:cdk:path": "CdkAccountfactoryStack/CloudTrail/Resource"
+        "aws:cdk:path": "CloudTrailStack/CloudTrail/Resource"
       }
     }
   }

@@ -22,7 +22,8 @@ def respond_cfn(event, status, data=None):
     requests.put(event['ResponseURL'], data=json.dumps(responseBody))
 
 def assume_role(account_id, account_role):
-    sts_client = boto3.client('sts')
+    sts_client = boto3.client('sts',
+                   endpoint_url='https://sts.ap-southeast-1.amazonaws.com')
     role_arn = 'arn:aws:iam::' + account_id + ':role/' + account_role
 
     assumedRoleObject = sts_client.assume_role(
@@ -104,7 +105,7 @@ def get_template(sourcebucket,baselinetemplate):
     return obj
 
 
-def create_baseline(template,credentials):
+def create_baseline(template,baselineStackName,credentials):
     log.info(credentials['AccessKeyId'])
     log.info(credentials['SecretAccessKey'])
     client = boto3.client('cloudformation',
@@ -116,7 +117,7 @@ def create_baseline(template,credentials):
                           
     print("Creating stack")
     create_stack_response = client.create_stack(
-                    StackName='accountfactorybaseline',
+                    StackName=baselineStackName,
                     TemplateBody=template
                 )
 
@@ -127,15 +128,21 @@ def main(event, context):
         try:
             #Create a new Account in the OU Just Created
             newAccountId = create_account()
+            print("Waiting for account preparation")
+            time.sleep(60)
     
             #Go into the new account
             credentials=assume_role(newAccountId,'OrganizationAccountAccessRole')
             
             #Apply baselines
-            print("Waiting for account preparation")
-            time.sleep(60)
-            template = get_template('waynetohpublic','accountfactory/baseline.json')
-            create_baseline(template,credentials)
+
+            bucketName = os.environ['bucketName']
+            template = get_template(bucketName,'accountfactory/CloudTrailStack.template.json')
+            create_baseline(template,'cloudtrailbaseline',credentials)
+            template = get_template(bucketName,'accountfactory/GuardDutyStack.template.json')
+            create_baseline(template,'guarddutybaseline',credentials)
+            template = get_template(bucketName,'accountfactory/VPCStack.template.json')
+            create_baseline(template,'vpcbaseline',credentials)
 
             
             respond_cfn(event,"SUCCESS",{"Message":"Account created successfully"})

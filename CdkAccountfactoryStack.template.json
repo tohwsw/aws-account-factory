@@ -3,6 +3,9 @@
     "AccountName": {
       "Type": "String"
     },
+    "bucketName": {
+      "Type": "String"
+    },
     "Email": {
       "Type": "String"
     },
@@ -52,7 +55,7 @@
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "CdkAccountbaselineStack/SingletonLambdaf7d4f7304ee111e89c2dfa7ae01bbebc/ServiceRole/Resource"
+        "aws:cdk:path": "CdkAccountfactoryStack/SingletonLambdaf7d4f7304ee111e89c2dfa7ae01bbebc/ServiceRole/Resource"
       }
     },
     "SingletonLambdaf7d4f7304ee111e89c2dfa7ae01bbebcServiceRoleDefaultPolicyEED0B067": {
@@ -81,14 +84,16 @@
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "CdkAccountbaselineStack/SingletonLambdaf7d4f7304ee111e89c2dfa7ae01bbebc/ServiceRole/DefaultPolicy/Resource"
+        "aws:cdk:path": "CdkAccountfactoryStack/SingletonLambdaf7d4f7304ee111e89c2dfa7ae01bbebc/ServiceRole/DefaultPolicy/Resource"
       }
     },
     "SingletonLambdaf7d4f7304ee111e89c2dfa7ae01bbebc492C6E5C": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
-          "S3Bucket": "waynetohpublic",
+          "S3Bucket": {
+            "Ref": "bucketName"
+          },
           "S3Key": "accountfactory/index.py.zip"
         },
         "Handler": "index.main",
@@ -109,6 +114,9 @@
             },
             "Email": {
               "Ref": "Email"
+            },
+            "bucketName": {
+              "Ref": "bucketName"
             }
           }
         },
@@ -119,7 +127,7 @@
         "SingletonLambdaf7d4f7304ee111e89c2dfa7ae01bbebcServiceRoleFE9ABB04"
       ],
       "Metadata": {
-        "aws:cdk:path": "CdkAccountbaselineStack/SingletonLambdaf7d4f7304ee111e89c2dfa7ae01bbebc/Resource"
+        "aws:cdk:path": "CdkAccountfactoryStack/SingletonLambdaf7d4f7304ee111e89c2dfa7ae01bbebc/Resource"
       }
     },
     "Resource": {
@@ -132,9 +140,10 @@
           ]
         }
       },
+      "UpdateReplacePolicy": "Delete",
       "DeletionPolicy": "Delete",
       "Metadata": {
-        "aws:cdk:path": "CdkAccountbaselineStack/Resource/Default"
+        "aws:cdk:path": "CdkAccountfactoryStack/Resource/Default"
       }
     }
   }

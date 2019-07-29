@@ -1,0 +1,13 @@
+{
+  "Resources": {
+    "myguardduty": {
+      "Type": "AWS::GuardDuty::Detector",
+      "Properties": {
+        "Enable": true
+      },
+      "Metadata": {
+        "aws:cdk:path": "GuardDutyStack/myguardduty"
+      }
+    }
+  }
+}

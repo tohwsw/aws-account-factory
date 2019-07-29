@@ -43,19 +43,19 @@ This approach of bootstrapping accounts will reduce operational overhead and sta
 
 ## Step 1
 
-Upload baseline.json and index.py.zip(this contains the Lambda function) to your preferred S3 bucket.
+Create the folder accountfactory in your preferred S3 bucket. Upload the baseline templates in the baseline folder and index.py.zip(this contains the Lambda function) to your preferred S3 bucket.
 
 ## Step 2
 
-Create a AWS Service Catalog with CloudFormation script createaccount.json.
+Create a AWS Service Catalog with CloudFormation script CdkAccountfactoryStack.template.json in your master account.
 
 ## Step 3
 
-Launch the product via AWS Service Catalog and log into the newly created AWS account by clicking the LoginURL.
+Launch the product via AWS Service Catalog and log into the newly created AWS account by using the switch role function.
 
 ## CDK
 
-The baseline.json and createaccount.json are created using AWS CDK. https://aws.amazon.com/cdk/
+The baseline templates and CdkAccountfactoryStack.template.json are created using AWS CDK. They are written in typescript and examples are uploaded into the CDK folder. The reference can be found in https://aws.amazon.com/cdk/
 
 
 
