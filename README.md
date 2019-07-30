@@ -57,5 +57,7 @@ Launch the product via AWS Service Catalog and log into the newly created AWS ac
 
 The baseline templates and CdkAccountfactoryStack.template.json are created using AWS CDK. They are written in typescript and examples are uploaded into the CDK folder. The reference can be found in https://aws.amazon.com/cdk/
 
+## Roadmap
 
+List of pending features can be found here. https://github.com/tohwsw/aws-account-factory/projects/1
 
