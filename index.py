@@ -118,7 +118,55 @@ def create_baseline(template,baselineStackName,credentials):
     print("Creating stack")
     create_stack_response = client.create_stack(
                     StackName=baselineStackName,
-                    TemplateBody=template
+                    TemplateBody=template,
+                    Capabilities=[
+                        'CAPABILITY_NAMED_IAM'
+                    ]
+                )
+
+def create_vpcbaseline(template,baselineStackName,credentials):
+    log.info(credentials['AccessKeyId'])
+    log.info(credentials['SecretAccessKey'])
+    client = boto3.client('cloudformation',
+                        region_name="ap-southeast-1",
+                        aws_access_key_id=credentials['AccessKeyId'],
+                          aws_secret_access_key=credentials['SecretAccessKey'],
+                          aws_session_token = credentials['SessionToken']
+                          )
+
+    cidrParam = os.environ['cidrParam']
+    publicSubnet1Param = os.environ['publicSubnet1Param']
+    publicSubnet2Param = os.environ['publicSubnet2Param']
+    privateSubnet1Param = os.environ['privateSubnet1Param']
+    privateSubnet2Param = os.environ['privateSubnet2Param']
+
+                          
+    print("Creating stack")
+    create_stack_response = client.create_stack(
+                    StackName=baselineStackName,
+                    TemplateBody=template,
+                    Parameters=[
+                        {
+                            'ParameterKey': 'cidrParam',
+                            'ParameterValue': cidrParam
+                        },
+                        {
+                            'ParameterKey': 'publicSubnet1Param',
+                            'ParameterValue': publicSubnet1Param
+                        },
+                        {
+                            'ParameterKey': 'publicSubnet2Param',
+                            'ParameterValue': publicSubnet2Param
+                        },
+                        {
+                            'ParameterKey': 'privateSubnet1Param',
+                            'ParameterValue': privateSubnet1Param
+                        },
+                        {
+                            'ParameterKey': 'privateSubnet2Param',
+                            'ParameterValue': privateSubnet2Param
+                        }
+                    ]
                 )
 
 #Main Lambda function to be executed

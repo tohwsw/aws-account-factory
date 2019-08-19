@@ -11,6 +11,26 @@
     },
     "OUName": {
       "Type": "String"
+    },
+    "cidrParam": {
+      "Type": "String",
+      "Default": "10.0.0.0/21"
+    },
+    "publicSubnet1Param": {
+      "Type": "String",
+      "Default": "10.0.0.0/24"
+    },
+    "publicSubnet2Param": {
+      "Type": "String",
+      "Default": "10.0.1.0/24"
+    },
+    "privateSubnet1Param": {
+      "Type": "String",
+      "Default": "10.0.2.0/24"
+    },
+    "privateSubnet2Param": {
+      "Type": "String",
+      "Default": "10.0.3.0/24"
     }
   },
   "Resources": {
@@ -117,6 +137,21 @@
             },
             "bucketName": {
               "Ref": "bucketName"
+            },
+            "cidrParam": {
+              "Ref": "cidrParam"
+            },
+            "publicSubnet1Param": {
+              "Ref": "publicSubnet1Param"
+            },
+            "publicSubnet2Param": {
+              "Ref": "publicSubnet2Param"
+            },
+            "privateSubnet1Param": {
+              "Ref": "privateSubnet1Param"
+            },
+            "privateSubnet2Param": {
+              "Ref": "privateSubnet2Param"
             }
           }
         },
