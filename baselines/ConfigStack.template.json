@@ -1,0 +1,246 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "",
+    "Resources": {
+        "ConfigurationRecorder": {
+            "Type": "AWS::Config::ConfigurationRecorder",
+            "Properties": {
+                "RoleARN": {
+                    "Fn::GetAtt": [
+                        "IamRoleForAwsConfig",
+                        "Arn"
+                    ]
+                },
+                "RecordingGroup": {
+                    "AllSupported": true,
+                    "IncludeGlobalResourceTypes": true
+                }
+            }
+        },
+        "DeliveryChannel": {
+            "Type": "AWS::Config::DeliveryChannel",
+            "Properties": {
+                "S3BucketName": {
+                    "Ref": "S3BucketForAwsConfig"
+                }
+            }
+        },
+        "S3BucketForAwsConfig": {
+            "Type": "AWS::S3::Bucket",
+            "UpdateReplacePolicy": "Retain",
+            "DeletionPolicy": "Retain"
+        },
+        "S3BucketPolicyForAwsConfig": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+                "Bucket": {
+                    "Ref": "S3BucketForAwsConfig"
+                },
+                "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "AWSConfigBucketPermissionsCheck",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "config.amazonaws.com"
+                                ]
+                            },
+                            "Action": "s3:GetBucketAcl",
+                            "Resource": {
+                                "Fn::GetAtt": [
+                                  "S3BucketForAwsConfig",
+                                  "Arn"
+                                ]
+                              }
+                        },
+                        {
+                            "Sid": " AWSConfigBucketDelivery",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "config.amazonaws.com"
+                                ]
+                            },
+                            "Action": "s3:PutObject",
+                            "Resource": {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "S3BucketForAwsConfig",
+                                        "Arn"
+                                      ]
+                                    },
+                                    "/AWSLogs/",
+                                    "/*"
+                                  ]
+                                ]
+                              },
+                            "Condition": {
+                                "StringEquals": {
+                                    "s3:x-amz-acl": "bucket-owner-full-control"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "IamRoleForAwsConfig": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "RoleName": "IamRoleForAwsConfig",
+                "ManagedPolicyArns": [
+                    "arn:aws:iam::aws:policy/service-role/AWSConfigRole"
+                ],
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": "config.amazonaws.com"
+                            },
+                            "Action": "sts:AssumeRole"
+                        }
+                    ]
+                },
+                "Policies": [
+                    {
+                        "PolicyName": "allow-access-to-config-s3-bucket",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "s3:PutObject"
+                                    ],
+                                    "Resource": [
+                                        {
+                                            "Fn::Join": [
+                                                "",
+                                                [
+                                                    {
+                                                        "Fn::GetAtt": [
+                                                            "S3BucketForAwsConfig",
+                                                            "Arn"
+                                                        ]
+                                                    },
+                                                    "/*"
+                                                ]
+                                            ]
+                                        }
+                                    ],
+                                    "Condition": {
+                                        "StringLike": {
+                                            "s3:x-amz-acl": "bucket-owner-full-control"
+                                        }
+                                    }
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "s3:GetBucketAcl"
+                                    ],
+                                    "Resource": {
+                                        "Fn::GetAtt": [
+                                            "S3BucketForAwsConfig",
+                                            "Arn"
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+    "EncryptedVolumes75831B43": {
+      "Type": "AWS::Config::ConfigRule",
+      "Properties": {
+        "Source": {
+          "Owner": "AWS",
+          "SourceIdentifier": "ENCRYPTED_VOLUMES"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "ConfigStack/EncryptedVolumes/Resource"
+      },
+      "DependsOn" : "ConfigurationRecorder"
+    },
+    "RdsStorageEncrypted7CC63F95": {
+      "Type": "AWS::Config::ConfigRule",
+      "Properties": {
+        "Source": {
+          "Owner": "AWS",
+          "SourceIdentifier": "RDS_STORAGE_ENCRYPTED"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "ConfigStack/RdsStorageEncrypted/Resource"
+      },
+      "DependsOn" : "ConfigurationRecorder"
+    },
+    "MultiRegionCloudTrailEnabled002A91F8": {
+      "Type": "AWS::Config::ConfigRule",
+      "Properties": {
+        "Source": {
+          "Owner": "AWS",
+          "SourceIdentifier": "MULTI_REGION_CLOUD_TRAIL_ENABLED"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "ConfigStack/MultiRegionCloudTrailEnabled/Resource"
+      },
+      "DependsOn" : "ConfigurationRecorder"
+    },
+    "VpcFlowLogsEnabled42A38A81": {
+      "Type": "AWS::Config::ConfigRule",
+      "Properties": {
+        "Source": {
+          "Owner": "AWS",
+          "SourceIdentifier": "VPC_FLOW_LOGS_ENABLED"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "ConfigStack/VpcFlowLogsEnabled/Resource"
+      },
+      "DependsOn" : "ConfigurationRecorder"
+    },
+    "IamUserMfaEnabledEFE8BB08": {
+      "Type": "AWS::Config::ConfigRule",
+      "Properties": {
+        "Source": {
+          "Owner": "AWS",
+          "SourceIdentifier": "IAM_USER_MFA_ENABLED"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "ConfigStack/IamUserMfaEnabled/Resource"
+      },
+      "DependsOn" : "ConfigurationRecorder"
+    },
+    "RootAccountMfaEnabledB3724010": {
+      "Type": "AWS::Config::ConfigRule",
+      "Properties": {
+        "Source": {
+          "Owner": "AWS",
+          "SourceIdentifier": "ROOT_ACCOUNT_MFA_ENABLED"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "ConfigStack/RootAccountMfaEnabled/Resource"
+      },
+      "DependsOn" : "ConfigurationRecorder"
+    }
+
+    },
+    "Parameters": {},
+    "Metadata": {},
+    "Conditions": {}
+}

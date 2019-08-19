@@ -139,6 +139,8 @@ def main(event, context):
             bucketName = os.environ['bucketName']
             template = get_template(bucketName,'accountfactory/CloudTrailStack.template.json')
             create_baseline(template,'cloudtrailbaseline',credentials)
+            template = get_template(bucketName,'accountfactory/ConfigStack.template.json')
+            create_baseline(template,'configbaseline',credentials)
             template = get_template(bucketName,'accountfactory/GuardDutyStack.template.json')
             create_baseline(template,'guarddutybaseline',credentials)
             template = get_template(bucketName,'accountfactory/VPCStack.template.json')
