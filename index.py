@@ -192,7 +192,7 @@ def main(event, context):
             template = get_template(bucketName,'accountfactory/GuardDutyStack.template.json')
             create_baseline(template,'guarddutybaseline',credentials)
             template = get_template(bucketName,'accountfactory/VPCStack.template.json')
-            create_baseline(template,'vpcbaseline',credentials)
+            create_vpcbaseline(template,'vpcbaseline',credentials)
 
             
             respond_cfn(event,"SUCCESS",{"Message":"Account created successfully"})
