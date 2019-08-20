@@ -29,6 +29,31 @@ export class CdkAccountfactoryStack extends cdk.Stack {
       default: this.node.tryGetContext('OUName'),
       type: "String",
     })
+    
+    const cidrParam = new cdk.CfnParameter(this, 'cidrParam', {
+      default: "10.0.0.0/21",
+      type: "String",
+    })
+    
+    const publicSubnet1Param = new cdk.CfnParameter(this, 'publicSubnet1Param', {
+      default: "10.0.0.0/24",
+      type: "String",
+    })
+    
+    const publicSubnet2Param = new cdk.CfnParameter(this, 'publicSubnet2Param', {
+      default: "10.0.1.0/24",
+      type: "String",
+    })
+    
+    const privateSubnet1Param = new cdk.CfnParameter(this, 'privateSubnet1Param', {
+      default: "10.0.2.0/24",
+      type: "String",
+    })
+    
+    const privateSubnet2Param = new cdk.CfnParameter(this, 'privateSubnet2Param', {
+      default: "10.0.3.0/24",
+      type: "String",
+    })
 
     const bucket = s3.Bucket.fromBucketName(this,'123',paramBucketName);
 
@@ -42,6 +67,11 @@ export class CdkAccountfactoryStack extends cdk.Stack {
                 'OUName': paramOUName,
                 'Email': paramEmail,
                 'bucketName': paramBucketName
+                'cidrParam' : cidrParam
+                'publicSubnet1Param' : publicSubnet1Param
+                'publicSubnet2Param' : publicSubnet2Param
+                'privateSubnet1Param' : privateSubnet1Param
+                'privateSubnet2Param' : privateSubnet2Param
               },
               runtime: lambda.Runtime.PYTHON_2_7
             });

@@ -21,9 +21,36 @@ export class CdkBaselineStack extends cdk.Stack {
       //* The created S3 bucket * CloudWatch Logging Disabled * No SNS configuartion * No tags * No fixed name
       const trail = new cloudtrail.Trail( this, 'CloudTrail', {});
     } 
+    else if (props.task == 'config'){
+      
+      new config.ManagedRule(this, 'EncryptedVolumes', {
+        identifier: 'ENCRYPTED_VOLUMES'
+      });
+      
+      new config.ManagedRule(this, 'RdsStorageEncrypted', {
+        identifier: 'RDS_STORAGE_ENCRYPTED'
+      });
+      
+      new config.ManagedRule(this, 'MultiRegionCloudTrailEnabled', {
+        identifier: 'MULTI_REGION_CLOUD_TRAIL_ENABLED'
+      });
+      
+      new config.ManagedRule(this, 'VpcFlowLogsEnabled', {
+        identifier: 'VPC_FLOW_LOGS_ENABLED'
+      });
+      
+      new config.ManagedRule(this, 'IamUserMfaEnabled', {
+        identifier: 'IAM_USER_MFA_ENABLED'
+      });
+      
+      new config.ManagedRule(this, 'RootAccountMfaEnabled', {
+        identifier: 'ROOT_ACCOUNT_MFA_ENABLED'
+      });
+      
+    }
     else if (props.task == 'newvpc') {
       const vpc = new ec2.Vpc(this, 'TheVPC', {
-        cidr: "10.0.0.0/21",
+        cidr: '10.0.0.0/21',
         subnetConfiguration: [
           {
             cidrMask: 24,
@@ -55,35 +82,14 @@ new CdkBaselineStack(app, "CloudTrailStack", {
     task: 'cloudtrail'
 });
 
+new CdkBaselineStack(app, "ConfigStack", {
+    task: 'config'
+});
+
 new CdkBaselineStack(app, "VPCStack", {
     task: 'newvpc'
 });
 
 
 
-    
-    /*
-    const myRole = new iam.Role( this, 'MyRole', {
-      assumedBy: new iam.ServicePrincipal('config.amazonaws.com')
-    });
   
-    myRole.addToPolicy(new iam.PolicyStatement({
-      resources: ['*'],
-      actions: ['*'] }));
-    
-    // Turn on config recorder and rules
-    const myConfigRecorder = new config.CfnConfigurationRecorder(this,'myconfig',{
-      roleArn:myRole.roleArn,
-      name:'myConfigurationRecorder'
-    });
-    
-    const configrule1 = new config.ManagedRule(this, 'AccessKeysRotated', {
-      identifier: 'ACCESS_KEYS_ROTATED'
-    });
-    
-    const deliverychannel =new config.CfnDeliveryChannel(this, 'mychannel',{s3BucketName:'waynetohpublic'})
-    
-   deliverychannel.addDependsOn(myConfigRecorder);
-   
-   */
-
